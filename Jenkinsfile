@@ -4,10 +4,19 @@ pipeline{
             label 'AGENT-1'
         }
     }
+    environment{
+        appVersion = ''
+    }
     stages {
-        stage('Build'){
+        stage('Read Package.json'){
             steps{
-                echo "Hello catalogue"
+                script {
+                    // Read the file from the workspace
+                    def packageJSON = readJSON file: 'package.json' 
+                    // Access specific fields
+                    appVersion = packageJSON.version
+                    echo "Package version :${appVersion}"
+                }
             }
         }
     }
